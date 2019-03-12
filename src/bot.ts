@@ -20,6 +20,6 @@ export class MyBot {
     }
 
     private movieCard(movieTitle: Movie) {
-
+        
     }
 }
