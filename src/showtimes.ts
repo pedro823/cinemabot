@@ -1,20 +1,27 @@
 import axios from 'axios';
 import * as cheerio from 'cheerio';
 import { writeFileSync } from 'fs';
-import { flatten } from 'ramda';
+import { uniq, concat, flatten } from 'ramda';
 
 const url = {
   movies: (page: number) =>
     `https://www.cinemark.com.br/sao-paulo/filmes/em-cartaz?pagina=${page}`,
   showtimes: (path: string) =>
     `https://www.cinemark.com.br${path}`,
+  image: (path: string) =>
+    `https://www.cinemark.com.br${path}`,
 };
+
+interface Showtimes {
+  [name: string]: string[]
+}
 
 interface Movie {
   title: string;
   path: string;
   rating: number;
   image: string;
+  showtimes: Showtimes;
 }
 
 const parseMovies = async (page: number) => {
@@ -32,10 +39,15 @@ const parseMovies = async (page: number) => {
       const rating = Number($('.rating-abbr', details).text().trim());
       const image = $('source', element).attr('srcset');
       movies.push({
-        title, path, rating, image
+        title, path, rating, image: url.image(image),
+        showtimes: {},
       })
     });
   }
+
+  await Promise.all(movies.map(async (movie) => {
+    movie.showtimes = await parseShowtimes(movie.path)
+  }));
 
   return movies;
 }
@@ -45,7 +57,7 @@ const getMovies = async () => {
 }
 
 const parseShowtimes = async (path: string) => {
-  const showtimes = []
+  const showtimes: Showtimes = {}
   
   const html = await axios.get(url.showtimes(path));
 
@@ -53,22 +65,13 @@ const parseShowtimes = async (path: string) => {
   const theaters = $('.theater');
   if (theaters.length > 0) {
     theaters.each((_, element) => {
-      // const details = $('.movie-details', element);
-      // const title = $('h3', details).text().trim();
-      // const path = $('a', details).attr('href');
-      // const rating = Number($('.rating-abbr', details).text().trim());
-      // const image = $('source', element).attr('srcset');
-      // movies.push({
-      //   title, path, rating, image
-      // })
+      const name = $('.title', element).text().trim();
+      const times = $('.times-options', element).children().map((_, time) =>
+        $('span', time).text()).get()
 
+      showtimes[name] = uniq(concat(showtimes[name] || [], times)).sort()
     });
   }
 
-  return movies;
+  return showtimes;
 }
-
-getMovies().then(movies => {
-  console.log(movies)
-  console.log(movies.length)
-})
