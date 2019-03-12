@@ -24,19 +24,21 @@ export class MyBot {
      */
     public onTurn = async (turnContext: TurnContext) => {
         // See https://aka.ms/about-bot-activity-message to learn more about the message and other activity types
-        if (turnContext.activity.type === ActivityTypes.Message) {
-            if (!this.isUserWelcomed(turnContext)) {
-                await turnContext.sendActivity(`Olá! Eu posso te informar os filmes em cartaz na sua cidade e os horários das sessões... O que você gostaria de saber?`);
-            } else {
-                await turnContext.sendActivity({
-                    text: 'Here is an Adaptive Card:',
-                    attachments: [CardFactory.adaptiveCard(this.movieCard())]
-                });
-            } 
-        } else {
+        if (turnContext.activity.type !== ActivityTypes.Message) {
             // Generic handler for all other activity types.
             await turnContext.sendActivity(`[${ turnContext.activity.type } event detected]`);
+            return
         }
+
+        if (!this.isUserWelcomed(turnContext)) {
+            await turnContext.sendActivity(`Olá! Eu posso te informar os filmes em cartaz na sua cidade e os horários das sessões... O que você gostaria de saber?`);
+            return
+        }
+
+        await turnContext.sendActivity({
+            text: 'Here is an Adaptive Card:',
+            attachments: [CardFactory.adaptiveCard(this.movieCard())]
+        });
     }
 
     private isUserWelcomed(turnContext) {
