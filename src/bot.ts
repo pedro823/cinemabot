@@ -27,6 +27,15 @@ export class MyBot {
      */
     public onTurn = async (turnContext: TurnContext) => {
         if (turnContext.activity.type === ActivityTypes.Message) {
+            if (movies) {
+                const text = turnContext.activity.text;
+                const movieTitles = movies.map(movie => movie.title.toLowerCase());
+                const movieIndex = movieTitles.indexOf(text)
+                if (movieIndex !== -1) {
+                    await this.listShowSessions(turnContext, movies[movieIndex])
+                    return
+                }
+            }
             await this.sendMovies(turnContext);
             return
         } 
@@ -35,8 +44,6 @@ export class MyBot {
             this.greetUser(turnContext)
             return
         }
-        
-        // TODO This is a card action.
     }
 
     private async greetUser(turnContext: TurnContext) {
@@ -59,8 +66,14 @@ export class MyBot {
         }
     }
 
-    private listShowSessions(turnContext: TurnContext, movie: Movie) {
-        
+    private async listShowSessions(turnContext: TurnContext, movie: Movie) {
+        let message = ''
+        for (const shopping in movie.showtimes) {
+        }
+
+        await turnContext.sendActivity({
+            text: movie.title
+        })
     }
 
     private async sendWelcomeMessage(turnContext: TurnContext) {
