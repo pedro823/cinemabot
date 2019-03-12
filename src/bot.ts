@@ -7,18 +7,8 @@ import { getMovies } from './showtimes'
 import { createMovieCard } from './card';
 
 import { movies } from './index';
-const WELCOMED_USER = "userWelcomed"
 
 export class MyBot {
-
-    private welcomedUserProperty: any
-    private userState: any
-
-    constructor(userState) {
-        this.welcomedUserProperty = userState.createProperty(WELCOMED_USER);
-
-        this.userState = userState
-    }
 
     /**
      * Use onTurn to handle an incoming activity, received from a user, process it, and reply as needed
@@ -38,9 +28,7 @@ export class MyBot {
             }
             await this.sendMovies(turnContext);
             return
-        } 
-        
-        if (turnContext.activity.type === ActivityTypes.ConversationUpdate) {
+        } else if (turnContext.activity.type === ActivityTypes.ConversationUpdate) {
             this.greetUser(turnContext)
             return
         }
@@ -48,12 +36,6 @@ export class MyBot {
 
     private async greetUser(turnContext: TurnContext) {
         await this.sendWelcomeMessage(turnContext);
-        await this.welcomedUserProperty.set(turnContext, true);
-        await this.userState.saveChanges(turnContext);
-    }
-
-    private isUserWelcomed(turnContext) {
-        return this.welcomedUserProperty.get(turnContext, true);
     }
 
     private async sendMovies(turnContext: TurnContext) {
