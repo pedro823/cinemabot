@@ -29,18 +29,14 @@ export class MyBot {
         if (turnContext.activity.type === ActivityTypes.Message) {
             await this.sendMovies(turnContext);
             return
-        } else if (turnContext.activity.type === ActivityTypes.ConversationUpdate) {
+        } 
+        
+        if (turnContext.activity.type === ActivityTypes.ConversationUpdate) {
             this.greetUser(turnContext)
-        } else {
-            // Generic handler for all other activity types.
-            await turnContext.sendActivity(`[${ turnContext.activity.type } event detected]`);
             return
         }
-
-        if (!this.isUserWelcomed(turnContext)) {
-            await turnContext.sendActivity(`Olá! Eu posso te informar os filmes em cartaz na sua cidade e os horários das sessões... O que você gostaria de saber?`);
-            return
-        }
+        
+        // TODO This is a card action.
     }
 
     private async greetUser(turnContext: TurnContext) {
