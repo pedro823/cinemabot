@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-import { ActivityTypes, TurnContext } from 'botbuilder';
+import { ActivityTypes, TurnContext, CardFactory } from 'botbuilder';
 
 export class MyBot {
     /**
@@ -17,5 +17,9 @@ export class MyBot {
             // Generic handler for all other activity types.
             await turnContext.sendActivity(`[${ turnContext.activity.type } event detected]`);
         }
+    }
+
+    private movieCard(movieTitle: Movie) {
+        
     }
 }
