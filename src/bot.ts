@@ -69,10 +69,11 @@ export class MyBot {
     private async listShowSessions(turnContext: TurnContext, movie: Movie) {
         let message = ''
         for (const shopping in movie.showtimes) {
+            message += `${shopping}: ${movie.showtimes[shopping]}\n`
         }
 
         await turnContext.sendActivity({
-            text: movie.title
+            text: message
         })
     }
 
