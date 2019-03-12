@@ -4,7 +4,7 @@
     "description": "Find movie showtimes near you!",
     "author": "Generated using Microsoft Bot Builder Yeoman generator v4.2.6",
     "license": "MIT",
-    "main": "./lib/index.js",
+    "main": "./lib/showtimes.js",
     "scripts": {
         "build": "node_modules/.bin/tsc --build",
         "lint": "node_modules/.bin/tslint -c tslint.json 'src/**/*.ts'",
@@ -18,14 +18,20 @@
         "url": "https://github.com"
     },
     "dependencies": {
+        "axios": "^0.18.0",
         "botbuilder": "^4.2.0",
         "botframework-config": "^4.2.0",
+        "cheerio": "^1.0.0-rc.2",
         "dotenv": "^6.1.0",
+        "fs-extra": "^7.0.1",
+        "ramda": "^0.26.1",
         "replace": "^1.0.0",
         "restify": "^7.2.3"
     },
     "devDependencies": {
+        "@types/cheerio": "^0.22.11",
         "@types/dotenv": "6.1.0",
+        "@types/ramda": "^0.26.3",
         "@types/restify": "7.2.6",
         "nodemon": "^1.18.7",
         "tslint": "^5.11.0",
