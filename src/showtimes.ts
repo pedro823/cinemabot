@@ -28,12 +28,15 @@ const parseMovies = async (page: number) => {
       movies.push({
         title, path, rating, image: url.image(image),
         showtimes: {},
+        synopsis: '',
       })
     });
   }
 
   await Promise.all(movies.map(async (movie) => {
-    movie.showtimes = await parseShowtimes(movie.path)
+    const { showtimes, synopsis } = await parseMovie(movie.path)
+    movie.showtimes = showtimes;
+    movie.synopsis = synopsis;
   }));
 
   return movies;
@@ -44,7 +47,7 @@ export const getMovies = async () => {
   return flatten(await Promise.all([1, 2, 3, 4].map(parseMovies))) as unknown as Movie[];
 };
 
-const parseShowtimes = async (path: string) => {
+const parseMovie = async (path: string) => {
   const showtimes: Showtimes = {};
 
   const html = await axios.get(url.showtimes(path));
@@ -61,5 +64,10 @@ const parseShowtimes = async (path: string) => {
     });
   }
 
-  return showtimes;
+  const synopsis = $('p', '.movie-sinopse').text().trim();
+
+  return {
+    showtimes,
+    synopsis,
+  }
 };

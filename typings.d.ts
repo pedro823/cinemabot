@@ -4,6 +4,7 @@ interface Movie {
     rating: number;
     image: string;
     showtimes: Showtimes;
+    synopsis: string;
 }
 
 interface Showtimes {

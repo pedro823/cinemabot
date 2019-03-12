@@ -1,4 +1,4 @@
-export const createMovieCard = ({title, rating, image}: Movie) => ({
+export const createMovieCard = ({title, rating, image, synopsis}: Movie) => ({
   $schema: "http://adaptivecards.io/schemas/adaptive-card.json",
   actions: [
       {
@@ -24,17 +24,11 @@ export const createMovieCard = ({title, rating, image}: Movie) => ({
                           weight: "bolder"
                       },
                       {
-                          isSubtle: true,
-                          spacing: "none",
-                          text: `Classificao: ${isNaN(rating) ? 'live' : rating}`,
-                          type: "TextBlock"
-                      },
-                      // {
-                      //     size: "small",
-                      //     text: "**Matt H. said** \"I'm compelled to give this place 5 stars due to the number of times I've chosen to eat here this past year!\"",
-                      //     type: "TextBlock",
-                      //     wrap: true
-                      // }
+                          size: "small",
+                          text: synopsis,
+                          type: "TextBlock",
+                          wrap: true
+                      }
                   ],
                   type: "Column",
                   width: 2
