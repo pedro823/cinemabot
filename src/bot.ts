@@ -18,7 +18,7 @@ export class MyBot {
     public onTurn = async (turnContext: TurnContext) => {
         if (turnContext.activity.type === ActivityTypes.Message) {
             if (movies) {
-                const text = turnContext.activity.text;
+                const text = turnContext.activity.text.toLowerCase();
                 const movieTitles = movies.map(movie => movie.title.toLowerCase());
                 const movieIndex = movieTitles.indexOf(text)
                 if (movieIndex !== -1) {
