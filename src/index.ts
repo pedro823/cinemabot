@@ -9,7 +9,7 @@ import { getMovies } from './showtimes';
 
 // Import required bot services.
 // See https://aka.ms/bot-services to learn more about the different parts of a bot.
-import { BotFrameworkAdapter } from 'botbuilder';
+import { BotFrameworkAdapter, UserState, MemoryStorage } from 'botbuilder';
 
 // Import required bot configuration.
 import { BotConfiguration, IEndpointService } from 'botframework-config';
@@ -71,8 +71,11 @@ adapter.onTurnError = async (context, error) => {
     await context.sendActivity(`Oops. Something went wrong!`);
 };
 
+
+const memoryStorage = new MemoryStorage()
+let userState = new UserState(memoryStorage)
 // Create the main dialog.
-const myBot = new MyBot();
+const myBot = new MyBot(userState);
 
 // Listen for incoming requests.
 server.post('/api/messages', (req, res) => {
