@@ -5,6 +5,8 @@ import { config } from 'dotenv';
 import * as path from 'path';
 import * as restify from 'restify';
 
+import { getMovies } from './showtimes';
+
 // Import required bot services.
 // See https://aka.ms/bot-services to learn more about the different parts of a bot.
 import { BotFrameworkAdapter } from 'botbuilder';
@@ -78,4 +80,11 @@ server.post('/api/messages', (req, res) => {
         // Route to main dialog.
         await myBot.onTurn(context);
     });
+});
+
+export var movies: Movie[]
+
+getMovies().then((res) => {
+    movies = res;
+    console.log(`Crawled ${res.length} movies.`)
 });

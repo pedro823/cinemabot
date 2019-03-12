@@ -40,8 +40,9 @@ const parseMovies = async (page: number) => {
   return movies;
 }
 
-const getMovies = async () => {
-  return flatten(await Promise.all([1, 2].map(parseMovies)));
+export const getMovies = async () => {
+  // please ramda stop doing this to me
+  return flatten(await Promise.all([1, 2, 3, 4].map(parseMovies))) as unknown as Movie[];
 }
 
 const parseShowtimes = async (path: string) => {
