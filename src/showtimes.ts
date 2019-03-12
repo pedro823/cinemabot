@@ -12,18 +12,6 @@ const url = {
     `https://www.cinemark.com.br${path}`,
 };
 
-interface Showtimes {
-  [name: string]: string[]
-}
-
-interface Movie {
-  title: string;
-  path: string;
-  rating: number;
-  image: string;
-  showtimes: Showtimes;
-}
-
 const parseMovies = async (page: number) => {
   const movies: Movie[] = [];
 
