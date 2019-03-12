@@ -13,6 +13,7 @@ export class MyBot {
 
     constructor(userState) {
         this.welcomedUserProperty = userState.createProperty(WELCOMED_USER);
+
         this.userState = userState
     }
 
@@ -24,8 +25,8 @@ export class MyBot {
     public onTurn = async (turnContext: TurnContext) => {
         // See https://aka.ms/about-bot-activity-message to learn more about the message and other activity types
         if (turnContext.activity.type === ActivityTypes.Message) {
-            if (this.isUserWelcomed(turnContext)) {
-                await turnContext.sendActivity(`Olá! Eu posso te informar os filmes em cartaz na sua cidade e os horários das sessões... O que você gostaria de saber?`);    
+            if (!this.isUserWelcomed(turnContext)) {
+                await turnContext.sendActivity(`Olá! Eu posso te informar os filmes em cartaz na sua cidade e os horários das sessões... O que você gostaria de saber?`);
             } else {
                 await turnContext.sendActivity({
                     text: 'Here is an Adaptive Card:',
@@ -39,7 +40,7 @@ export class MyBot {
     }
 
     private isUserWelcomed(turnContext) {
-        return this.welcomedUserProperty.get(turnContext, false);
+        return this.welcomedUserProperty.get(turnContext, true);
     }
 
     private movieCard() {
