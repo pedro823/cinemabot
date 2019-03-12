@@ -3,8 +3,10 @@
 
 import { ActivityTypes, TurnContext, CardFactory } from 'botbuilder';
 import { getMovies } from './showtimes'
-import MovieCard from './resources/movieCard.json';
 
+import { createMovieCard } from './card';
+
+import { movies } from './index';
 const WELCOMED_USER = "userWelcomed"
 
 export class MyBot {
@@ -25,10 +27,7 @@ export class MyBot {
      */
     public onTurn = async (turnContext: TurnContext) => {
         if (turnContext.activity.type === ActivityTypes.Message) {
-            await turnContext.sendActivity({
-                text: 'Here is an Adaptive Card:',
-                attachments: [CardFactory.adaptiveCard(this.movieCard())]
-            }); 
+            await this.sendMovies(turnContext);
         } else if (turnContext.activity.type === ActivityTypes.ConversationUpdate) {
             this.greetUser(turnContext)
         } else {
@@ -41,15 +40,6 @@ export class MyBot {
             await turnContext.sendActivity(`Olá! Eu posso te informar os filmes em cartaz na sua cidade e os horários das sessões... O que você gostaria de saber?`);
             return
         }
-
-        await turnContext.sendActivity({
-            text: 'Here is an Adaptive Card:',
-            attachments: [CardFactory.adaptiveCard(this.movieCard())]
-        });
-    }
-
-    private listMovies(): Promise<Movie[][]> {
-        return getMovies()
     }
 
     private async greetUser(turnContext: TurnContext) {
@@ -62,8 +52,14 @@ export class MyBot {
         return this.welcomedUserProperty.get(turnContext, true);
     }
 
-    private movieCard() {
-        return MovieCard
+    private async sendMovies(turnContext: TurnContext) {
+        if (movies) {
+            await turnContext.sendActivity({
+                text: `I know about these movies in Sao Paulo`,
+                attachments: movies.map(movie => 
+                    CardFactory.adaptiveCard(createMovieCard(movie))),
+            });
+        }
     }
 
     private async sendWelcomeMessage(turnContext: TurnContext) {

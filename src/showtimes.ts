@@ -1,7 +1,6 @@
 import axios from 'axios';
 import * as cheerio from 'cheerio';
-import { writeFileSync } from 'fs';
-import { uniq, concat, flatten } from 'ramda';
+import { concat, flatten, uniq } from 'ramda';
 
 const url = {
   movies: (page: number) =>
@@ -38,15 +37,16 @@ const parseMovies = async (page: number) => {
   }));
 
   return movies;
-}
+};
 
 export const getMovies = async () => {
-  return flatten(await Promise.all([1, 2].map(parseMovies)));
-}
+  // please ramda stop doing this to me
+  return flatten(await Promise.all([1, 2, 3, 4].map(parseMovies))) as unknown as Movie[];
+};
 
 const parseShowtimes = async (path: string) => {
-  const showtimes: Showtimes = {}
-  
+  const showtimes: Showtimes = {};
+
   const html = await axios.get(url.showtimes(path));
 
   const $ = cheerio.load(html.data);
@@ -62,4 +62,4 @@ const parseShowtimes = async (path: string) => {
   }
 
   return showtimes;
-}
+};
