@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { ActivityTypes, TurnContext, CardFactory } from 'botbuilder';
+import MovieCard from '../cards/movieCard.json'
 
 export class MyBot {
     /**
@@ -20,6 +21,7 @@ export class MyBot {
     }
 
     private movieCard(movieTitle: Movie) {
+        const thisMovieCard = MovieCard
         
     }
 }
