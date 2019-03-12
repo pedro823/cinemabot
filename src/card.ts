@@ -1,11 +1,11 @@
 export const createMovieCard = ({title, rating, image}: Movie) => ({
   $schema: "http://adaptivecards.io/schemas/adaptive-card.json",
   actions: [
-      // {
-      //     title: "More Info",
-      //     type: "Action.OpenUrl",
-      //     url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
-      // }
+      {
+        type: "Action.Submit",
+        data: title,
+        title: "Sessoes",
+      }
   ],
   body: [
       {
@@ -54,7 +54,7 @@ export const createMovieCard = ({title, rating, image}: Movie) => ({
           speak: "Tom's Pie is a Pizza restaurant which is rated 9.3 by customers.",
           type: "ColumnSet"
       }
-  ],
+  ],  
   type: "AdaptiveCard",
   version: "1.0"
 })
