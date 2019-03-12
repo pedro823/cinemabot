@@ -7,18 +7,8 @@ import { getMovies } from './showtimes'
 import { createMovieCard } from './card';
 
 import { movies } from './index';
-const WELCOMED_USER = "userWelcomed"
 
 export class MyBot {
-
-    private welcomedUserProperty: any
-    private userState: any
-
-    constructor(userState) {
-        this.welcomedUserProperty = userState.createProperty(WELCOMED_USER);
-
-        this.userState = userState
-    }
 
     /**
      * Use onTurn to handle an incoming activity, received from a user, process it, and reply as needed
@@ -27,26 +17,25 @@ export class MyBot {
      */
     public onTurn = async (turnContext: TurnContext) => {
         if (turnContext.activity.type === ActivityTypes.Message) {
+            if (movies) {
+                const text = turnContext.activity.text;
+                const movieTitles = movies.map(movie => movie.title.toLowerCase());
+                const movieIndex = movieTitles.indexOf(text)
+                if (movieIndex !== -1) {
+                    await this.listShowSessions(turnContext, movies[movieIndex])
+                    return
+                }
+            }
             await this.sendMovies(turnContext);
             return
-        } 
-        
-        if (turnContext.activity.type === ActivityTypes.ConversationUpdate) {
+        } else if (turnContext.activity.type === ActivityTypes.ConversationUpdate) {
             this.greetUser(turnContext)
             return
         }
-        
-        // TODO This is a card action.
     }
 
     private async greetUser(turnContext: TurnContext) {
         await this.sendWelcomeMessage(turnContext);
-        await this.welcomedUserProperty.set(turnContext, true);
-        await this.userState.saveChanges(turnContext);
-    }
-
-    private isUserWelcomed(turnContext) {
-        return this.welcomedUserProperty.get(turnContext, true);
     }
 
     private async sendMovies(turnContext: TurnContext) {
@@ -59,8 +48,15 @@ export class MyBot {
         }
     }
 
-    private listShowSessions(turnContext: TurnContext, movie: Movie) {
-        
+    private async listShowSessions(turnContext: TurnContext, movie: Movie) {
+        let message = ''
+        for (const shopping in movie.showtimes) {
+            message += `${shopping}: ${movie.showtimes[shopping]}\n`
+        }
+
+        await turnContext.sendActivity({
+            text: message
+        })
     }
 
     private async sendWelcomeMessage(turnContext: TurnContext) {
