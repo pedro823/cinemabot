@@ -28,6 +28,7 @@ export class MyBot {
     public onTurn = async (turnContext: TurnContext) => {
         if (turnContext.activity.type === ActivityTypes.Message) {
             await this.sendMovies(turnContext);
+            return
         } else if (turnContext.activity.type === ActivityTypes.ConversationUpdate) {
             this.greetUser(turnContext)
         } else {
@@ -60,6 +61,10 @@ export class MyBot {
                     CardFactory.adaptiveCard(createMovieCard(movie))),
             });
         }
+    }
+
+    private listShowSessions(turnContext: TurnContext, movie: Movie) {
+        
     }
 
     private async sendWelcomeMessage(turnContext: TurnContext) {
