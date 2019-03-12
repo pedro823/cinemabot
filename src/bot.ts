@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { ActivityTypes, TurnContext, CardFactory } from 'botbuilder';
-import MovieCard from '../cards/movieCard.json'
+import MovieCard from './resources/movieCard.json';
 
 export class MyBot {
     /**
