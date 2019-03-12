@@ -13,15 +13,17 @@ export class MyBot {
     public onTurn = async (turnContext: TurnContext) => {
         // See https://aka.ms/about-bot-activity-message to learn more about the message and other activity types
         if (turnContext.activity.type === ActivityTypes.Message) {
-            await turnContext.sendActivity(`You said '${ turnContext.activity.text }'`);
+            await turnContext.sendActivity({
+                text: 'Here is an Adaptive Card:',
+                attachments: [CardFactory.adaptiveCard(this.movieCard())]
+            });
         } else {
             // Generic handler for all other activity types.
             await turnContext.sendActivity(`[${ turnContext.activity.type } event detected]`);
         }
     }
 
-    private movieCard(movieTitle: Movie) {
-        const thisMovieCard = MovieCard
-        
+    private movieCard() {
+        return MovieCard
     }
 }
