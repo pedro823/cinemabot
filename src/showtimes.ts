@@ -40,7 +40,7 @@ const parseMovies = async (page: number) => {
   return movies;
 }
 
-const getMovies = async () => {
+export const getMovies = async () => {
   return flatten(await Promise.all([1, 2].map(parseMovies)));
 }
 

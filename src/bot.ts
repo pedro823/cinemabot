@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { ActivityTypes, TurnContext, CardFactory } from 'botbuilder';
+import { getMovies } from './showtimes'
 import MovieCard from './resources/movieCard.json';
 
 const WELCOMED_USER = "userWelcomed"
@@ -39,6 +40,10 @@ export class MyBot {
             text: 'Here is an Adaptive Card:',
             attachments: [CardFactory.adaptiveCard(this.movieCard())]
         });
+    }
+
+    private listMovies(): Promise<Movie[][]> {
+        return getMovies()
     }
 
     private isUserWelcomed(turnContext) {
