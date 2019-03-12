@@ -42,7 +42,7 @@ export class MyBot {
         return this.welcomedUserProperty.get(turnContext, false);
     }
 
-    private movieCard(movieTitle: Movie) {
-        const thisMovieCard = MovieCard
+    private movieCard() {
+        return MovieCard
     }
 }
